@@ -15,12 +15,18 @@ using namespace std;
 template <class type>
 class List{
 public:
-    virtual bool insert(int index, type data) = 0;
-    virtual bool append(type data) = 0;
+    virtual void insert(int index, type data) = 0;
+    virtual void append(type data) = 0;
     virtual type remove(int index) = 0;
+    virtual type visit(int index) = 0;
+    virtual void traverse() = 0;
+    virtual void doubleSpace() = 0;
     virtual void clear() = 0;
-    virtual ~List();
+    virtual ~List() {};
 };
+
+class OutOfBound{};
+class IllegalSize{};
 
 template <class type>
 class AList : public List<type>{
@@ -36,56 +42,89 @@ public:
         listSize = fence = 0;
     }
     ~AList(){ delete[] arrayList;}
-    bool insert(int index, type data);
-    bool append(type data);
+    void insert(int index, type data);
+    void append(type data);
     type remove(int index);
+    type visit(int index);
+    void traverse();
+    void doubleSpace();
     void clear();
 };
 
 template <class type>
-bool AList<type>::insert(int index, type data){
-    if(index >= 0 && index <= listSize && listSize <= maxSize){
-        for(int i=listSize-1; i>index; i--){
-            arrayList[i] = arrayList[i-1];
-        }
-        arrayList[index] = data;
-        listSize++;
-        return true;
-    }else{
-        cerr << "Can't insert element!" << endl;
-        return false;
+void AList<type>::insert(int index, type data){
+    if(index < 0 || index <= listSize) throw OutOfBound();
+    if(listSize == maxSize) doubleSpace();
+    for(int i=listSize-1; i>index; i--){
+        arrayList[i] = arrayList[i-1];
     }
-    
+    arrayList[index] = data;
+    ++listSize;
 }
 
 template <class type>
-bool AList<type>::append(type data){
-    if(listSize <= maxSize){
-        arrayList[listSize] = data;
-        listSize++;
-        return true;
-    }else{
-        cerr << "The list is full!" << endl;
-        return false;
-    }
+void AList<type>::append(type data){
+    if(listSize == maxSize) doubleSpace();
+    arrayList[listSize] = data;
+    ++listSize;
 }
 
 template <class type>
 type AList<type>::remove(int index){
-    if(index >=0 && index < listSize){
-        type elem = arrayList[index];
-        for(int i=index; i<listSize-1; i++){
-            arrayList[i] = arrayList[i+1];
-        }
-        return elem;
-    }else{
-        return NULL;
+    if(index<0 && index>=listSize) throw OutOfBound();
+    type elem = arrayList[index];
+    for(int i=index; i<listSize-1; i++){
+        arrayList[i] = arrayList[i+1];
     }
+    --listSize;
+    return elem;    
+}
+
+template <class type>
+type AList<type>::visit(int index){
+    if(index <0 || index >= listSize) throw OutOfBound();
+    return arrayList[index];
+}
+
+template <class type>
+void AList<type>::traverse(){
+    for(int i=0; i<listSize; i++){
+        cout << arrayList[i] << ",";
+    }
+    cout << "The size is " << listSize << endl;
+}
+
+template <class type>
+void AList<type>::doubleSpace(){
+    type *tmp = arrayList;
+    maxSize *= 2;
+    arrayList = new type[maxSize];
+    for(int i=0; i<listSize; i++){
+        arrayList[i] = tmp[i];
+    }
+    delete[] tmp;
+}
+
+template <class type>
+void AList<type>::clear(){
+    delete[] arrayList;
+    listSize = 0;
+    arrayList = new type[maxSize];
 }
 
 template <class type>
 void process(type t){
-    
+    AList<type> alist;
+    type data;
+    int size;
+    cin >> size;
+    for(int i=0; i<size; i++){
+        cin >> data;
+        alist.append(data);
+    }
+    alist.traverse();
+    alist.clear();
+    alist.traverse();
 }
 
 int main(int argc, const char * argv[]) {
