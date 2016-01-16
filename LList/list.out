@@ -1,0 +1,26 @@
+9,8,7,6,5,4,3,2,The size is 8
+98,7,6,5,4,3,2,The size is 7
+Move to End;
+Move to prev;
+8,7,6,5,4,3,2,The size is 7
+Insert 100
+8,7,6,5,4,3,100,2,The size is 8
+Move to pos 4;
+Insert 200
+8,7,6,5,200,4,3,100,2,The size is 9
+Move to next
+4
+leftLength: 5
+rightLength: 4
+Move to start
+8
+leftLength: 0
+rightLength: 9
+leftLength: 9
+rightLength: 0
+8,7,6,5,200,4,3,100,2,The size is 9
+leftLength: 8
+rightLength: 1
+8,7,6,5,200,4,3,100,2,The size is 9
+8,7,6,5,200,4,3,100,The size is 8
+The size is 0
