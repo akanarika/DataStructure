@@ -6,7 +6,7 @@
 //  Copyright © 2016年 Dandan Du. All rights reserved.
 //
 
-#define DEFAULTSIZE 10000
+#define DEFAULTSIZE 10
 
 #include <iostream>
 #include <fstream>
@@ -53,7 +53,7 @@ public:
 
 template <class type>
 void AList<type>::insert(int index, type data){
-    if(index < 0 || index <= listSize) throw OutOfBound();
+    if(index < 0 || index >= listSize) throw OutOfBound();
     if(listSize == maxSize) doubleSpace();
     for(int i=listSize-1; i>index; i--){
         arrayList[i] = arrayList[i-1];
@@ -122,6 +122,14 @@ void process(type t){
         cin >> data;
         alist.append(data);
     }
+    alist.traverse();
+    alist.insert(1,100);
+    alist.traverse();
+    alist.remove(6);
+    alist.traverse();
+    alist.append(88);
+    alist.traverse();
+    alist.append(90);
     alist.traverse();
     alist.clear();
     alist.traverse();
